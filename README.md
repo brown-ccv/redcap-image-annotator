@@ -1,1 +1,2 @@
-# cv-self-harm
+# redcap-image-annotator
+

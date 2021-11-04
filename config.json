@@ -1,0 +1,80 @@
+{
+  "name": "Image Viewer",
+
+  "namespace":"Stanford\\ImageViewer",
+
+  "description": "Preview uploaded images or pdfs files on a form/survey",
+
+  "framework-version": 3,
+
+  "authors": [
+    {
+      "name": "Andrew Martin",
+      "email": "andy123@stanford.edu",
+      "institution": "Stanford University"
+    },
+    {
+      "name": "Günther Rezniczek", 
+      "email": "guenther.rezniczek@rub.de",
+      "institution": "Ruhr-Universität Bochum"
+    }
+  ],
+
+  "permissions": [
+    "hook_data_entry_form_top",
+    "hook_survey_page_top",
+    "hook_every_page_top",
+    "hook_every_page_before_render"
+  ],
+
+  "links": {
+    "control-center": [
+    ],
+    "project": [
+    ]
+  },
+
+  "system-settings": [
+    {
+      "key": "log-path",
+      "name": "<b>OPTIONAL</b><br>Leave blank for no logging.<br>Enter a valid server logging path to enable module logging (e.g. <pre>/var/log/image_viewer.log</pre>)<br>If the log path is not valid, it will log to the php_error log",
+      "required": false,
+      "type": "text"
+    }
+  ],
+
+  "project-settings": [
+    {
+      "key": "javascript-debug",
+      "name": "Output debug information in the browser console",
+      "type": "checkbox"
+    },
+    {
+      "key": "active-fields",
+      "name": "Configure one or more file-upload fields to activate ImageViewer preview:",
+      "required": false,
+      "type": "sub_settings",
+      "repeatable": true,
+      "sub_settings": [
+        {
+          "key": "fields",
+          "name": "<div><b>Field with attachment</b><br>This field should be of the type file-upload or a descriptive field with an attached file</div>",
+          "required": true,
+          "type": "field-list"
+        },
+        {
+          "key": "field-params",
+          "name": "<div><b>Optional</b><br>Parameters entered here can be used to customize the behavior as new features are added.  The format is valid json strings.  For example, to force the height, try<br><code>{ \"height\": \"500px\" }</code></div><br>",
+          "required": false,
+          "type": "json"
+        }
+      ]
+    }
+  ],
+  "compatibility": {
+      "php-version-min": "5.6.0",
+      "php-version-max": "",
+      "redcap-version-min": "9.7.8",
+      "redcap-version-max": ""
+   }
+}
