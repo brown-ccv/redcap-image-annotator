@@ -1,22 +1,27 @@
 var IVEM = IVEM || {};
 
-function showMarkerArea(target, cont) {
+function showMarkerArea(target, input, cont) {
     const markerArea = new markerjs2.MarkerArea(target);
     // Place marker over image
+    // console.log("input (before event listen):", input)
+    // console.log("cont:", cont)
     markerArea.targetRoot = target.parentElement;
-    var input = cont.closest('tr').find('textarea')
+    // var input = cont.closest('tr').find('textarea')
     markerArea.addEventListener(
       "render",
       (event) => {
-          target.src = event.dataUrl
-          console.log(event.state)
-          console.log(input)
-          input.val(JSON.stringify(event.state))
-        }
-    );
-
+        target.src = event.dataUrl;
+        // save the state of MarkerArea
+        maState = event.state;
+        console.log("event.stat:", event.state);
+        console.log("input:", input);
+        // insert annotation data into text area
+        input.val(JSON.stringify(maState))
+    });
+    // Show marker 
     markerArea.show();
-    if (input.val()){
+    // if annotation 
+    if (input.val()) {
         markerArea.restoreState(JSON.parse(input.val()))
     }
 }
@@ -91,14 +96,15 @@ IVEM.init = function() {
  */
 IVEM.insertPreview = function(field, params) {
 
-    var data = IVEM.preview_fields[field]
+    console.log("params:", params)
     
-    // IVEM.log('preview data', data, "DEBUG");
+    var data = IVEM.preview_fields[field]
     
     // Get parent tr for table
     var tr = $('tr[sq_id="' + field + '"]');
     if (! tr.length) return;
     var td_label = tr.find('td.labelrc').last();
+    // console.log("td_label:", td_label)
 
     // input.css('visibility', 'hidden');
     
@@ -133,6 +139,7 @@ IVEM.insertPreview = function(field, params) {
     var td = a.closest('td');
     var td_width = a.length ? td.width() : td_label.width();
     IVEM.log('Processing', field, params.params);
+    // console.log("td:", td)
 
     // A preview hash indicates that the file was just uploaded and must be previewed using the every_page_before_render hook
     // We will add the ivem_preview tag to the query string to distinguish this request
@@ -171,10 +178,15 @@ IVEM.insertPreview = function(field, params) {
     }
     else if (params.piped) {
         // Piping - get target containers
+        // console.log("pipe source:", params.pipe_source)
         $container = $('div[data-ivem-pipe-source=' + params.pipe_source + ']')
+        // console.log("else if container", $container)
     }
+    // console.log("container:", $container)
     $container.each(function() {
         $this_cont = $(this)
+        // console.log("type(this_cont):", typeof $this_cont)
+        console.log("this_cont:", $this_cont)
         // Handle valid images
         if (IVEM.valid_image_suffixes.indexOf(params.suffix.toLowerCase()) !== -1)
         {
@@ -186,14 +198,19 @@ IVEM.insertPreview = function(field, params) {
                 .css('margin-left', 'auto')
                 .css('margin-right', 'auto')
                 .css('display', 'block');
-
-            // TODO
+            // Show annotation markers on image
             $img.on("click", function() {
-                console.log(tr)
-                var input = tr.find('textarea')
-                showMarkerArea($img[0], $this_cont)
+                // console.log("tr:", tr)
+                // var text_input = tr.find('textarea')
+                // console.log("tr type:", typeof tr)
+                // image that is being viewed
+                var target_img = $img[0]
+                // text area next to viewed image
+                var text_input = $(target_img.closest('tr').getElementsByTagName('textarea')[0])
+                console.log("target_img", target_img)
+                console.log("text_input", typeof text_input)
+                showMarkerArea(target_img, text_input, $this_cont)
             })
-
             // Append custom CSS if specified for the field
             $.each(params.params, function(k,v) {
                 $img.css(k,v);
