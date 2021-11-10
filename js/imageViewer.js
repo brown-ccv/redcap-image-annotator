@@ -3,24 +3,16 @@ var IVEM = IVEM || {};
 function showMarkerArea(target, input, cont) {
     const markerArea = new markerjs2.MarkerArea(target);
     // Place marker over image
-    // console.log("input (before event listen):", input)
-    // console.log("cont:", cont)
     markerArea.targetRoot = target.parentElement;
-    // var input = cont.closest('tr').find('textarea')
     markerArea.addEventListener(
       "render",
       (event) => {
         target.src = event.dataUrl;
-        // save the state of MarkerArea
-        maState = event.state;
-        console.log("event.stat:", event.state);
-        console.log("input:", input);
         // insert annotation data into text area
-        input.val(JSON.stringify(maState))
+        input.val(JSON.stringify(event.state))
     });
     // Show marker 
     markerArea.show();
-    // if annotation 
     if (input.val()) {
         markerArea.restoreState(JSON.parse(input.val()))
     }
@@ -95,8 +87,6 @@ IVEM.init = function() {
  * @param field
  */
 IVEM.insertPreview = function(field, params) {
-
-    console.log("params:", params)
     
     var data = IVEM.preview_fields[field]
     
@@ -104,9 +94,6 @@ IVEM.insertPreview = function(field, params) {
     var tr = $('tr[sq_id="' + field + '"]');
     if (! tr.length) return;
     var td_label = tr.find('td.labelrc').last();
-    // console.log("td_label:", td_label)
-
-    // input.css('visibility', 'hidden');
     
     // Get hash (surveys only)
     var hash = $('#form :input[name=__response_hash__]').val();
@@ -139,7 +126,6 @@ IVEM.insertPreview = function(field, params) {
     var td = a.closest('td');
     var td_width = a.length ? td.width() : td_label.width();
     IVEM.log('Processing', field, params.params);
-    // console.log("td:", td)
 
     // A preview hash indicates that the file was just uploaded and must be previewed using the every_page_before_render hook
     // We will add the ivem_preview tag to the query string to distinguish this request
@@ -157,14 +143,6 @@ IVEM.insertPreview = function(field, params) {
                 .attr('data-ivem-container', params.container_id)
                 .css('position', 'relative')
                 .css('padding-top', '30px')
-                // .on('click', function(){
-                //     // TODO: more complex event handler for inserting annotation data into redcap text field
-                //     // - figure out drawing instead of click: canvas, 
-                //     tr.find('textarea')
-                //       .val('hello world')
-                //     // alert('hello-world')
-                    // console.log(tr);
-                // })
             if (params.piped) {
                 $container.attr('data-ivem-pipe-source', params.pipe_source)
             }
@@ -178,15 +156,10 @@ IVEM.insertPreview = function(field, params) {
     }
     else if (params.piped) {
         // Piping - get target containers
-        // console.log("pipe source:", params.pipe_source)
         $container = $('div[data-ivem-pipe-source=' + params.pipe_source + ']')
-        // console.log("else if container", $container)
     }
-    // console.log("container:", $container)
     $container.each(function() {
         $this_cont = $(this)
-        // console.log("type(this_cont):", typeof $this_cont)
-        console.log("this_cont:", $this_cont)
         // Handle valid images
         if (IVEM.valid_image_suffixes.indexOf(params.suffix.toLowerCase()) !== -1)
         {
@@ -200,15 +173,10 @@ IVEM.insertPreview = function(field, params) {
                 .css('display', 'block');
             // Show annotation markers on image
             $img.on("click", function() {
-                // console.log("tr:", tr)
-                // var text_input = tr.find('textarea')
-                // console.log("tr type:", typeof tr)
-                // image that is being viewed
-                var target_img = $img[0]
-                // text area next to viewed image
-                var text_input = $(target_img.closest('tr').getElementsByTagName('textarea')[0])
-                console.log("target_img", target_img)
-                console.log("text_input", typeof text_input)
+                // get image that is being viewed
+                let target_img = $img[0]
+                // get text area next to target image
+                let text_input = $(target_img.closest('tr').getElementsByTagName('textarea')[0])
                 showMarkerArea(target_img, text_input, $this_cont)
             })
             // Append custom CSS if specified for the field
