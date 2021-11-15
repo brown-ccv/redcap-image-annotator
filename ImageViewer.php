@@ -38,11 +38,6 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
         $this->renderPreview($project_id, $instrument, $record, $event_id, $repeat_instance, $survey_hash);
     }
     
-    // debug
-    // function redcap_survey_page_top($project_id, $record = NULL, $instrument, $event_id, $group_id = NULL, $survey_hash, $response_id = NULL, $repeat_instance = 1) {
-    //     $this->renderPreview($project_id, $instrument, $record, $event_id, $repeat_instance, $survey_hash);
-    // }
-
     // Designer and Project Setup cosmetics
     function hook_every_page_top($project_id = null)
     {
@@ -284,9 +279,6 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
         }
         $payload = urlencode($payload);
         ?>
-            <!-- debug -->
-            <script>console.log("<?php print $payload ?>")</script>
-
             <script src="<?php print $this->getUrl('js/pdfobject.min.js'); ?>"></script>
             <script src="<?php print $this->getUrl('js/imageViewer.js'); ?>"></script>
             <script src="https://unpkg.com/markerjs2/markerjs2.js"></script>
