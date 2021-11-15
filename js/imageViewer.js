@@ -1,22 +1,19 @@
 var IVEM = IVEM || {};
 
-function showMarkerArea(target, cont) {
+function showMarkerArea(target, input, cont) {
     const markerArea = new markerjs2.MarkerArea(target);
     // Place marker over image
     markerArea.targetRoot = target.parentElement;
-    var input = cont.closest('tr').find('textarea')
     markerArea.addEventListener(
       "render",
       (event) => {
-          target.src = event.dataUrl
-          console.log(event.state)
-          console.log(input)
-          input.val(JSON.stringify(event.state))
-        }
-    );
-
+        target.src = event.dataUrl;
+        // insert annotation data into text area
+        input.val(JSON.stringify(event.state))
+    });
+    // Show marker 
     markerArea.show();
-    if (input.val()){
+    if (input.val()) {
         markerArea.restoreState(JSON.parse(input.val()))
     }
 }
@@ -90,17 +87,13 @@ IVEM.init = function() {
  * @param field
  */
 IVEM.insertPreview = function(field, params) {
-
-    var data = IVEM.preview_fields[field]
     
-    // IVEM.log('preview data', data, "DEBUG");
+    var data = IVEM.preview_fields[field]
     
     // Get parent tr for table
     var tr = $('tr[sq_id="' + field + '"]');
     if (! tr.length) return;
     var td_label = tr.find('td.labelrc').last();
-
-    // input.css('visibility', 'hidden');
     
     // Get hash (surveys only)
     var hash = $('#form :input[name=__response_hash__]').val();
@@ -150,14 +143,6 @@ IVEM.insertPreview = function(field, params) {
                 .attr('data-ivem-container', params.container_id)
                 .css('position', 'relative')
                 .css('padding-top', '30px')
-                // .on('click', function(){
-                //     // TODO: more complex event handler for inserting annotation data into redcap text field
-                //     // - figure out drawing instead of click: canvas, 
-                //     tr.find('textarea')
-                //       .val('hello world')
-                //     // alert('hello-world')
-                    // console.log(tr);
-                // })
             if (params.piped) {
                 $container.attr('data-ivem-pipe-source', params.pipe_source)
             }
@@ -186,14 +171,14 @@ IVEM.insertPreview = function(field, params) {
                 .css('margin-left', 'auto')
                 .css('margin-right', 'auto')
                 .css('display', 'block');
-
-            // TODO
+            // Show annotation markers on image
             $img.on("click", function() {
-                console.log(tr)
-                var input = tr.find('textarea')
-                showMarkerArea($img[0], $this_cont)
+                // get image that is being viewed
+                let target_img = $img[0]
+                // get text area next to target image
+                let text_input = $(target_img.closest('tr').getElementsByTagName('textarea')[0])
+                showMarkerArea(target_img, text_input, $this_cont)
             })
-
             // Append custom CSS if specified for the field
             $.each(params.params, function(k,v) {
                 $img.css(k,v);
