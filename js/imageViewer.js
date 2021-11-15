@@ -74,6 +74,7 @@ IVEM.init = function() {
         IVEM.setupProxy();
 
         // Process each field on the page that already contains data when the page is loaded
+        console.log("IVEM.preview_fileds", IVEM.preview_fields)
         $.each(IVEM.preview_fields, function(field, params) {
             IVEM.insertPreview(field, params);
         });
@@ -158,48 +159,50 @@ IVEM.insertPreview = function(field, params) {
         // Piping - get target containers
         $container = $('div[data-ivem-pipe-source=' + params.pipe_source + ']')
     }
+    console.log("container:", $container)
     $container.each(function() {
         $this_cont = $(this)
         // Handle valid images
-        if (IVEM.valid_image_suffixes.indexOf(params.suffix.toLowerCase()) !== -1)
-        {
-            // Create a new image element and shrink to fit wd_width.
-            var $img = $('<img/>')
-                .addClass('IVEM')
-                .attr('src', src)
-                .css('max-width', td_width + 'px')
-                .css('margin-left', 'auto')
-                .css('margin-right', 'auto')
-                .css('display', 'block');
-            // Show annotation markers on image
-            $img.on("click", function() {
-                // get image that is being viewed
-                let target_img = $img[0]
-                // get text area next to target image
-                let text_input = $(target_img.closest('tr').getElementsByTagName('textarea')[0])
-                showMarkerArea(target_img, text_input, $this_cont)
-            })
-            // Append custom CSS if specified for the field
-            $.each(params.params, function(k,v) {
-                $img.css(k,v);
-            });
-            // Empty container and add image
-            $this_cont.empty().append($img);
-        }
+        console.log("params:", params)
+        // if (IVEM.valid_image_suffixes.indexOf(params.suffix.toLowerCase()) !== -1)
+        // {
+        // Create a new image element and shrink to fit wd_width.
+        var $img = $('<img/>')
+            .addClass('IVEM')
+            .attr('src', src)
+            .css('max-width', td_width + 'px')
+            .css('margin-left', 'auto')
+            .css('margin-right', 'auto')
+            .css('display', 'block');
+        // Show annotation markers on image
+        $img.on("click", function() {
+            // get image that is being viewed
+            let target_img = $img[0]
+            // get text area next to target image
+            let text_input = $(target_img.closest('tr').getElementsByTagName('textarea')[0])
+            showMarkerArea(target_img, text_input, $this_cont)
+        })
+        // Append custom CSS if specified for the field
+        $.each(params.params, function(k,v) {
+            $img.css(k,v);
+        });
+        // Empty container and add image
+        $this_cont.empty().append($img);
+        // }
         // Handle Valid PDF Files - https://github.com/pipwerks/PDFObject
-        else if (IVEM.valid_pdf_suffixes.indexOf(params.suffix.toLowerCase()) !== -1)
-        {
-            src = src + '&stream=1';
-            IVEM.log('Creating PDF with ' + src);
-            var $pdf = $('<div/>').attr('id', field + '_pdfobject');
-            // Empty container and add pdf
-            $this_cont.empty().append($pdf)
-            // Set default pdf options and load any custom options from the field params
-            var options = { fallbackLink: 'This browser does not support inline PDFs' };
-            $.extend(options, params.params);
-            // Create object
-            IVEM[field + '_pdf'] = PDFObject.embed(src, $pdf, options);
-        }
+        // else if (IVEM.valid_pdf_suffixes.indexOf(params.suffix.toLowerCase()) !== -1)
+        // {
+        //     src = src + '&stream=1';
+        //     IVEM.log('Creating PDF with ' + src);
+        //     var $pdf = $('<div/>').attr('id', field + '_pdfobject');
+        //     // Empty container and add pdf
+        //     $this_cont.empty().append($pdf)
+        //     // Set default pdf options and load any custom options from the field params
+        //     var options = { fallbackLink: 'This browser does not support inline PDFs' };
+        //     $.extend(options, params.params);
+        //     // Create object
+        //     IVEM[field + '_pdf'] = PDFObject.embed(src, $pdf, options);
+        // }
     })
 };
 
@@ -209,10 +212,11 @@ IVEM.insertPreview = function(field, params) {
  * @returns {string}
  */
 IVEM.getExtension = function (path) {
+    console.log("path", path)
     var basename = path.split(/[\\/]/).pop(),  // extract file name from full path ...
         // (supports `\\` and `/` separators)
         pos = basename.lastIndexOf('.');       // get last position of `.`
-
+    console.log("basename", basename)
     if (basename === '' || pos < 1)            // if file name is empty or ...
         return '';                             //  `.` not found (-1) or comes first (0)
 
@@ -289,6 +293,8 @@ IVEM.setupProxy = function() {
             params.piped = true
             params.suffix = suffix
             params.pipe_source = field + '-' + event_id + '-' + instance
+            console.log("field:", field)
+            console.log("params:", params)
             IVEM.insertPreview(field, params)
         }
         // Add optional updateTrigger than can be called on completion of the upload

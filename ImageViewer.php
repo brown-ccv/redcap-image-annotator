@@ -37,6 +37,11 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
     function hook_survey_page_top($project_id, $record = NULL, $instrument, $event_id, $group_id = NULL, $survey_hash, $response_id = NULL, $repeat_instance = 1) {
         $this->renderPreview($project_id, $instrument, $record, $event_id, $repeat_instance, $survey_hash);
     }
+    
+    // debug
+    // function redcap_survey_page_top($project_id, $record = NULL, $instrument, $event_id, $group_id = NULL, $survey_hash, $response_id = NULL, $repeat_instance = 1) {
+    //     $this->renderPreview($project_id, $instrument, $record, $event_id, $repeat_instance, $survey_hash);
+    // }
 
     // Designer and Project Setup cosmetics
     function hook_every_page_top($project_id = null)
@@ -59,12 +64,9 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
     }
 
     // Renders the preview after a fresh upload
-    function hook_every_page_before_render($project_id = null)
-    {
+    function hook_every_page_before_render($project_id = null) {
         $project_id = $project_id === null ? -1 : $project_id * 1;
         
-        // Util::log("(test) project ID $project_id", "DEBUG");
-
         // Handle survey call-backs for the file after upload
         if ((PAGE == "surveys/index.php" || PAGE == "DataEntry/file_download.php") && isset($_GET["ivem_preview"])) {
 
@@ -91,8 +93,6 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
             [__response_hash__] => 7bc7e7d27f22e27252129dea5664723084df21d5e2340f1ba79185ac26dda168
             [pnid] => imageview_em_test
              */
-
-            // Util::log("payload:", $payload, "DEBUG");
 
             // This EM relies on a new method for external modules which allows them to quit without an error.  Until
             // that is released, we will just try to play with the buffer to suppress the output of the rest of the
@@ -236,8 +236,6 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
 
         $action_tag_results = ActionTagHelper::getActionTags($this->imagePipeTag);
 
-        Util::log("action_tag_results", $action_tag_results, "DEBUG");
-
         if (isset($action_tag_results[$this->imagePipeTag])) {
             foreach ($action_tag_results[$this->imagePipeTag] as $field => $param_array) {
                 $params = $param_array["params"];
@@ -269,8 +267,6 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
         $allowed = array_values(array_map(function($e) { 
             return $e->field; 
         }, $this->getPipedFields()));
-
-        Util::log("field_params", $field_params, "DEBUG");
         
         $allowed = array_unique(array_merge($allowed, array_keys($field_params)));
         $debug = $this->getProjectSetting("javascript-debug") == true;
@@ -287,8 +283,10 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
             $payload = "nop";
         }
         $payload = urlencode($payload);
-        Util::log("field_params", $field_params, "DEBUG");
         ?>
+            <!-- debug -->
+            <script>console.log("<?php print $payload ?>")</script>
+
             <script src="<?php print $this->getUrl('js/pdfobject.min.js'); ?>"></script>
             <script src="<?php print $this->getUrl('js/imageViewer.js'); ?>"></script>
             <script src="https://unpkg.com/markerjs2/markerjs2.js"></script>
@@ -368,9 +366,7 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
             $sourceForm = $project->getFormByField($sourceField);
             $sourceEventId = $source["event_id"];
             $sourceInstance = $source["instance"];
-            // TODO: check what below does
             $data = REDCap::getData('array',$record, $sourceField);
-            // Util::log("data", $data, "DEBUG");
             if ($project->isFieldOnRepeatingForm($sourceField, $sourceEventId)) {
                 $result = $data[$record]["repeat_instances"][$sourceEventId][$sourceForm][$sourceInstance];
             }
@@ -425,8 +421,7 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
             $preview_fields[$into]["piped"] = true;
             $preview_fields[$into]["params"] = isset($active_field_params[$into]) ? $active_field_params[$into] : @$active_field_params[$from];
         }
-        Util::log("pipe_sources", $pipe_sources, "DEBUG");
-        // Util::log("Previewing existing files", $preview_fields);
+        Util::log("Previewing existing files", $preview_fields);
 
         $this->renderJavascriptSetup($project_id);
         ?>
