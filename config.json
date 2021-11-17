@@ -24,7 +24,7 @@
     "hook_data_entry_form_top",
     "hook_survey_page_top",
     "hook_every_page_top",
-    "hook_every_page_before_render"
+    "hook_every_page_before_render",
   ],
 
   "links": {

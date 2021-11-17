@@ -1,2 +1,5 @@
 notes.txt
 imgs/*
+.DS_Store
+logs/
+scrap.json
