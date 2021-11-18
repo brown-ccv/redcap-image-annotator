@@ -202,6 +202,8 @@ IVEM.insertPreview = function (field, params) {
     $this_cont = $(this);
     // Create a new image element
     if (params.suffix) {
+      // we are putting a copy of the original image under the result image so it's always annotation-free 
+      // (https://markerjs.com/demos/save-state)
       var $source_img = $("<img/>")
         .addClass("IVEM")
         .attr("src", src)
