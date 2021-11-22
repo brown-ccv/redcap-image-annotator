@@ -1,16 +1,16 @@
-<?php namespace Stanford\ImageViewer;
+<?php namespace BrownCCV\ImageViewerAnnotate;
 
 if (!class_exists("Util")) include_once("classes/Util.php");
 
-use DE\RUB\ImageViewerExternalModule\Project;
+use DE\RUB\ImageViewerAnnotateExternalModule\Project;
 use \REDCap as REDCap;
 use \Files as Files;
 use \Piping as Piping;
 use \Event as Event;
 
-use Stanford\Utility\ActionTagHelper;
+use BrownCCV\Utility\ActionTagHelper;
 
-class ImageViewer extends \ExternalModules\AbstractExternalModule {
+class ImageViewerAnnotate extends \ExternalModules\AbstractExternalModule {
 
     private $imageViewTag = "@IMAGEVIEW";
     // private $imagePipeTag = "@IMAGEPIPE";
@@ -187,7 +187,7 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
         }
 
         // Get from action tags (and only take if not specified in external module settings)
-        if (!class_exists("\Stanford\Utility\ActionTagHelper")) include_once("classes/ActionTagHelper.php");
+        if (!class_exists("\BrownCCV\Utility\ActionTagHelper")) include_once("classes/ActionTagHelper.php");
 
         $action_tag_results = ActionTagHelper::getActionTags($this->imageViewTag);
         if (isset($action_tag_results[$this->imageViewTag])) {
@@ -222,9 +222,9 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
      */
     function getPipedFields($project_id = null, $instrument = null, $record = null, $event_id = null, $instance = 1) {
         // Get from action tags (and only take if not specified in external module settings)
-        if (!class_exists("\Stanford\Utility\ActionTagHelper")) include_once("classes/ActionTagHelper.php");
+        if (!class_exists("\BrownCCV\Utility\ActionTagHelper")) include_once("classes/ActionTagHelper.php");
 
-        if (!class_exists("\DE\RUB\ImageViewerExternalModule\Project")) include_once ("classes/Project.php");
+        if (!class_exists("\DE\RUB\ImageViewerAnnotateExternalModule\Project")) include_once ("classes/Project.php");
         $project = new Project($this->framework, $project_id ?: $this->framework->getProjectId());
 
         $field_params = array();
@@ -279,9 +279,9 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
         }
         $payload = urlencode($payload);
         ?>
-            <script src="<?php print $this->getUrl('js/pdfobject.min.js'); ?>"></script>
-            <script src="<?php print $this->getUrl('js/imageViewer.js'); ?>"></script>
-            <script src="<?php print $this->getUrl('/node_modules/markerjs2/markerjs2.js'); ?>"></script>
+            <!-- delete later -->
+            <script src="<?php print $this->getUrl('js/imageViewerAnnotate.js'); ?>"></script>
+            <script src="<?php print $this->getUrl('js/markerjs2.js'); ?>"></script>
             <script>
                 IVEM.valid_image_suffixes = <?php print json_encode($this->valid_image_suffixes) ?>;
                 IVEM.valid_pdf_suffixes = <?php print json_encode($this->valid_pdf_suffixes) ?>;
@@ -306,7 +306,7 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
      */
     function renderPreview($project_id, $instrument, $record, $event_id, $instance, $survey_hash = null) {
 
-        if (!class_exists("\DE\RUB\ImageViewerExternalModule\Project")) include_once ("classes/Project.php");
+        if (!class_exists("\DE\RUB\ImageViewerAnnotateExternalModule\Project")) include_once ("classes/Project.php");
         $project = new Project($this->framework, $project_id);
 
         $active_field_params = $this->getFieldParams();
@@ -417,6 +417,7 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
 
         $this->renderJavascriptSetup($project_id);
         ?>
+            
             <script>
                 // Load the fields and parameters and start it up
                 IVEM.preview_fields = <?php print json_encode($preview_fields) ?>;

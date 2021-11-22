@@ -1,6 +1,6 @@
 <?php
 
-namespace Stanford\Utility;
+namespace BrownCCV\Utility;
 
 use \REDCap as REDCap;
 
