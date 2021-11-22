@@ -1,5 +1,7 @@
 notes.txt
-imgs/*
+imgs/
 .DS_Store
 logs/
 scrap.json
+node_modules/
+.tool-versions
