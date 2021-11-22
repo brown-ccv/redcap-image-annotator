@@ -281,7 +281,7 @@ class ImageViewer extends \ExternalModules\AbstractExternalModule {
         ?>
             <script src="<?php print $this->getUrl('js/pdfobject.min.js'); ?>"></script>
             <script src="<?php print $this->getUrl('js/imageViewer.js'); ?>"></script>
-            <script src="https://unpkg.com/markerjs2/markerjs2.js"></script>
+            <script src="./node_modules/markerjs2/markerjs2.js"></script>
             <script>
                 IVEM.valid_image_suffixes = <?php print json_encode($this->valid_image_suffixes) ?>;
                 IVEM.valid_pdf_suffixes = <?php print json_encode($this->valid_pdf_suffixes) ?>;
