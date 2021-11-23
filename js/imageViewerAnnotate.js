@@ -91,7 +91,6 @@ IVEM.init = function () {
  * @param field
  */
 IVEM.insertPreview = function (field, params) {
-  console.log("??");
   var data = IVEM.preview_fields[field];
 
   // Get parent tr for table

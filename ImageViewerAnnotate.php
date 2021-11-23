@@ -279,7 +279,6 @@ class ImageViewerAnnotate extends \ExternalModules\AbstractExternalModule {
         }
         $payload = urlencode($payload);
         ?>
-            <!-- delete later -->
             <script src="<?php print $this->getUrl('js/imageViewerAnnotate.js'); ?>"></script>
             <script src="<?php print $this->getUrl('js/markerjs2.js'); ?>"></script>
             <script>
@@ -417,7 +416,7 @@ class ImageViewerAnnotate extends \ExternalModules\AbstractExternalModule {
 
         $this->renderJavascriptSetup($project_id);
         ?>
-            
+
             <script>
                 // Load the fields and parameters and start it up
                 IVEM.preview_fields = <?php print json_encode($preview_fields) ?>;
