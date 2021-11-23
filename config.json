@@ -1,22 +1,22 @@
 {
-  "name": "Image Viewer",
+  "name": "Image Viewer and Annotate",
 
-  "namespace":"Stanford\\ImageViewer",
+  "namespace":"BrownCCV\\ImageViewerAnnotate",
 
-  "description": "Preview uploaded images or pdfs files on a form/survey",
+  "description": "Preview and annotate uploaded images on a form/survey",
 
   "framework-version": 3,
 
   "authors": [
     {
-      "name": "Andrew Martin",
-      "email": "andy123@stanford.edu",
-      "institution": "Stanford University"
+      "name": "Matthew Slivinski",
+      "email": "matthew_slivinski@brown.edu",
+      "institution": "Brown University"
     },
     {
-      "name": "Günther Rezniczek", 
-      "email": "guenther.rezniczek@rub.de",
-      "institution": "Ruhr-Universität Bochum"
+      "name": "Mary McGrath",
+      "email": "mary_mcgrath@brown.edu",
+      "institution": "Brown University"
     }
   ],
 

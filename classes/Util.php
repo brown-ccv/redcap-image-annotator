@@ -1,5 +1,5 @@
 <?php
-namespace Stanford\ImageViewer;
+namespace BrownCCV\ImageViewerAnnotate;
 
 class Util
 {

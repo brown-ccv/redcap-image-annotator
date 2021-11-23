@@ -98,6 +98,9 @@ IVEM.insertPreview = function (field, params) {
   if (!tr.length) return;
   var td_label = tr.find("td.labelrc").last();
 
+  // hide text input
+  tr.find("textarea").css("visibility", "hidden");
+
   // Get hash (surveys only)
   var hash = $("#form :input[name=__response_hash__]").val();
 
@@ -213,16 +216,15 @@ IVEM.insertPreview = function (field, params) {
         .attr("src", src)
         .css("width", "100%")
         .css("position", "absolute")
-        .css("left", "0");
+        .css("left", "0");  
       // Show annotation markers on annotation image
       $annotation_img.on("click", function () {
         // get image data from jquery variables
         const source_img = $source_img[0];
         const target_img = $annotation_img[0];
-        // get text area next to target image
         const text_input = $(
-            target_img.closest("tr").getElementsByTagName("textarea")[0]
-          );
+          target_img.closest("tr").getElementsByTagName("textarea")[0]
+        );
         showMarkerArea(target_img, source_img, text_input);
       });
       // Append custom CSS if specified for the field

@@ -1,5 +1,4 @@
 notes.txt
-imgs/*
+imgs/
 .DS_Store
-logs/
-scrap.json
+.code-workspace
