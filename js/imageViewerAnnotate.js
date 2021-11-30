@@ -205,38 +205,44 @@ IVEM.insertPreview = function (field, params) {
     $this_cont = $(this);
     // Create a new image element
     if (params.suffix) {
-      // we are putting a copy of the original image under the result image so it's always annotation-free 
-      // (https://markerjs.com/demos/save-state)
+      // We are putting a copy of the original image under the result image so it's always annotation-free 
+      // Ref: https://markerjs.com/demos/save-state
       var $source_img = $("<img/>")
         .addClass("IVEM")
         .attr("src", src)
         .css("width", "100%")
-      var $annotation_img = $("<img/>")
-        .addClass("IVEM")
-        .attr("src", src)
-        .css("width", "100%")
-        .css("position", "absolute")
-        .css("left", "0");  
-      // Show annotation markers on annotation image
-      $annotation_img.on("click", function () {
-        // get image data from jquery variables
-        const target_img = $annotation_img[0];
-        const text_input = $(
-          target_img.closest("tr").getElementsByTagName("textarea")[0]
-        );
-        const source_img = $source_img[0];
-        // Only show the marker if we have a text area
-        if (Object.keys(text_input).length != 0) {
+      if (params.piped) {
+        var $annotation_img = $("<img/>")
+          .addClass("IVEM")
+          .attr("src", src)
+          .css("width", "100%")
+          .css("position", "absolute")
+          .css("left", "0");  
+        // Show annotation markers on annotation image
+        $annotation_img.on("click", function () {
+          // Get image data from jquery variables
+          const target_img = $annotation_img[0];
+          const source_img = $source_img[0];
+          const text_input = $(
+            target_img.closest("tr").getElementsByTagName("textarea")[0]
+          );
+          // Only show the marker if we have a text area
           showMarkerArea(target_img, source_img, text_input);
-        }
-      });
+        });
+      }
+      
       // Append custom CSS if specified for the field
       $.each(params.params, function (k, v) {
         $source_img.css(k, v);
-        $annotation_img.css(k, v);
+        if (params.piped) {
+          $annotation_img.css(k, v);
+        }
       });
       // Empty container and add image
-      $this_cont.empty().append($source_img).append($annotation_img);
+      $this_cont.empty().append($source_img);
+      if (params.piped) {
+        $this_cont.empty().append($source_img).append($annotation_img);
+      }
     }
   });
 };
