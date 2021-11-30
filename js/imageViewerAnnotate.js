@@ -220,12 +220,15 @@ IVEM.insertPreview = function (field, params) {
       // Show annotation markers on annotation image
       $annotation_img.on("click", function () {
         // get image data from jquery variables
-        const source_img = $source_img[0];
         const target_img = $annotation_img[0];
         const text_input = $(
           target_img.closest("tr").getElementsByTagName("textarea")[0]
         );
-        showMarkerArea(target_img, source_img, text_input);
+        const source_img = $source_img[0];
+        // Only show the marker if we have a text area
+        if (Object.keys(text_input).length != 0) {
+          showMarkerArea(target_img, source_img, text_input);
+        }
       });
       // Append custom CSS if specified for the field
       $.each(params.params, function (k, v) {
