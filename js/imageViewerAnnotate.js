@@ -3,6 +3,10 @@ var IVEM = IVEM || {};
 // shows marker along with inserting marker data into text field
 function showMarkerArea(target, source, input) {
   const markerArea = new markerjs2.MarkerArea(source);
+  // Limit available markers
+  markerArea.availableMarkerTypes = [
+    "FreehandMarker"
+  ]
   // Place marker over image
   markerArea.targetRoot = source.parentElement;
   markerArea.addEventListener("render", (event) => {
@@ -214,6 +218,7 @@ IVEM.insertPreview = function (field, params) {
         .addClass("IVEM")
         .attr("src", src)
         .css("width", "100%")
+        .css("padding", "1em");
       if (params.piped) {
         var $annotation_img = $("<img/>")
           .addClass("IVEM")
