@@ -98,8 +98,11 @@ IVEM.insertPreview = function (field, params) {
   if (!tr.length) return;
   var td_label = tr.find("td.labelrc").last();
 
-  // hide text input
+  // Hide text input
   tr.find("textarea").css("visibility", "hidden");
+
+  // Hide expand link
+  tr.find("[id$=expand]").css("visibility", "hidden");
 
   // Get hash (surveys only)
   var hash = $("#form :input[name=__response_hash__]").val();
