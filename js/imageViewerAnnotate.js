@@ -192,9 +192,10 @@ IVEM.insertPreview = function (field, params) {
       $container = $("<div></div>")
         .attr("data-ivem-container", params.container_id)
         .css("position", "relative")
-        .css("padding-top", "30px")
+        .css("margin-top", "50px")
+        .css("margin-bottom", "50px")
         .css("margin-left", "auto")
-        .css("margin-right", "auto");
+        .css("margin-right", "20px");
       if (params.piped) {
         $container.attr("data-ivem-pipe-source", params.pipe_source);
       }
@@ -217,8 +218,7 @@ IVEM.insertPreview = function (field, params) {
       var $source_img = $("<img/>")
         .addClass("IVEM")
         .attr("src", src)
-        .css("width", "100%")
-        .css("padding", "1em");
+        .css("width", "100%");
       if (params.piped) {
         var $annotation_img = $("<img/>")
           .addClass("IVEM")
