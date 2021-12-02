@@ -102,11 +102,19 @@ IVEM.insertPreview = function (field, params) {
   if (!tr.length) return;
   var td_label = tr.find("td.labelrc").last();
 
-  // Hide text input
-  tr.find("textarea").css("visibility", "hidden");
+  td_label[0].setAttribute("colspan", "2");
+  // console.log(tr.find("td.labelrc").last());
 
+  // Style and hide text input
+  tr.find("textarea")
+    .css("height", "0")
+    .css("width", "0")
+    .css("padding", "0")
+    .css("visibility", "hidden");
+  
   // Hide expand link
   tr.find("[id$=expand]").css("visibility", "hidden");
+
 
   // Get hash (surveys only)
   var hash = $("#form :input[name=__response_hash__]").val();
@@ -192,10 +200,24 @@ IVEM.insertPreview = function (field, params) {
       $container = $("<div></div>")
         .attr("data-ivem-container", params.container_id)
         .css("position", "relative")
-        .css("margin-top", "50px")
-        .css("margin-bottom", "50px")
+        .css("margin-top", "auto")
+        .css("margin-bottom", "40px")
         .css("margin-left", "auto")
-        .css("margin-right", "20px");
+        .css("margin-right", "auto");
+      // Adjustments for desktop (width > 700) and mobile (width <= 700)
+      if ($container[0].ownerDocument.body.offsetWidth > 700) {
+        // Add a top margin equal to the height of the annotation options
+        $container.css("margin-top", "40px");
+        // TODO: take over css space
+        // apply to td html
+        // colspan=2, 
+        // console.log($container.parent());
+
+      } else {
+        // next td apply css
+        // display: block, width: 0, overflow: hidden, padding: 0
+      }
+      // test: make sure you can submit
       if (params.piped) {
         $container.attr("data-ivem-pipe-source", params.pipe_source);
       }
@@ -234,7 +256,6 @@ IVEM.insertPreview = function (field, params) {
           const text_input = $(
             target_img.closest("tr").getElementsByTagName("textarea")[0]
           );
-          // Only show the marker if we have a text area
           showMarkerArea(target_img, source_img, text_input);
         });
       }
