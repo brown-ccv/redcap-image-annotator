@@ -102,8 +102,8 @@ IVEM.insertPreview = function (field, params) {
   if (!tr.length) return;
   var td_label = tr.find("td.labelrc").last();
 
-  td_label[0].setAttribute("colspan", "2");
-  // console.log(tr.find("td.labelrc").last());
+  // Check if desktop (width > 700)
+  const is_desktop = tr[0].ownerDocument.body.offsetWidth > 700;
 
   // Style and hide text input
   tr.find("textarea")
@@ -112,9 +112,12 @@ IVEM.insertPreview = function (field, params) {
     .css("padding", "0")
     .css("visibility", "hidden");
   
-  // Hide expand link
-  tr.find("[id$=expand]").css("visibility", "hidden");
-
+  // Style and hide expand link
+  tr.find("[id$=expand]")
+    .css("height", "0")
+    .css("width", "0")
+    .css("padding", "0")  
+    .css("visibility", "hidden");
 
   // Get hash (surveys only)
   var hash = $("#form :input[name=__response_hash__]").val();
@@ -200,24 +203,14 @@ IVEM.insertPreview = function (field, params) {
       $container = $("<div></div>")
         .attr("data-ivem-container", params.container_id)
         .css("position", "relative")
-        .css("margin-top", "auto")
-        .css("margin-bottom", "40px")
-        .css("margin-left", "auto")
-        .css("margin-right", "auto");
-      // Adjustments for desktop (width > 700) and mobile (width <= 700)
-      if ($container[0].ownerDocument.body.offsetWidth > 700) {
-        // Add a top margin equal to the height of the annotation options
+        .css("margin-bottom", "40px");
+      
+      // Adjust margins so that annotation options don't overflow 
+      if (is_desktop) {
         $container.css("margin-top", "40px");
-        // TODO: take over css space
-        // apply to td html
-        // colspan=2, 
-        // console.log($container.parent());
-
       } else {
-        // next td apply css
-        // display: block, width: 0, overflow: hidden, padding: 0
+        $container.css("margin-top", "5px");
       }
-      // test: make sure you can submit
       if (params.piped) {
         $container.attr("data-ivem-pipe-source", params.pipe_source);
       }
@@ -240,14 +233,19 @@ IVEM.insertPreview = function (field, params) {
       var $source_img = $("<img/>")
         .addClass("IVEM")
         .attr("src", src)
-        .css("width", "100%");
+        // .css("width", "100%")
+        // .css("position", "absolute")
+        .css("max-height", "50%")
+        .css("width", "auto");
       if (params.piped) {
         var $annotation_img = $("<img/>")
           .addClass("IVEM")
           .attr("src", src)
-          .css("width", "100%")
+          // .css("width", "100%")
           .css("position", "absolute")
-          .css("left", "0");  
+          .css("left", "0")
+          .css("max-height", "50%")
+          .css("width", "auto");
         // Show annotation markers on annotation image
         $annotation_img.on("click", function () {
           // Get image data from jquery variables
@@ -259,7 +257,21 @@ IVEM.insertPreview = function (field, params) {
           showMarkerArea(target_img, source_img, text_input);
         });
       }
-      
+
+      // For desktop and annotation areas...
+      let $td_labelrc = $this_cont.closest("td.labelrc");
+      if (is_desktop && ($td_labelrc.length != 0)) {
+        // Have survey question and image take over both columns
+        $td_labelrc.attr("colspan", "2");
+        
+        // Style and hide data cell
+        $td_labelrc.siblings("td.data")
+          .css("height", "0")
+          .css("width", "0")
+          .css("padding", "0")
+          .css("visibility", "hidden");
+      } 
+
       // Append custom CSS if specified for the field
       $.each(params.params, function (k, v) {
         $source_img.css(k, v);
@@ -272,6 +284,7 @@ IVEM.insertPreview = function (field, params) {
       if (params.piped) {
         $this_cont.empty().append($source_img).append($annotation_img);
       }
+
     }
   });
 };
