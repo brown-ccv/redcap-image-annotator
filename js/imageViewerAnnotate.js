@@ -203,14 +203,17 @@ IVEM.insertPreview = function (field, params) {
       $container = $("<div></div>")
         .attr("data-ivem-container", params.container_id)
         .css("position", "relative")
-        .css("margin-bottom", "40px");
+        .css("margin-bottom", "40px")
+        .css("height", "50vh")
+        .css("max-width", "300px");
       
-      // Adjust margins so that annotation options don't overflow 
+      // Container adjustments based on desktop or mobile
       if (is_desktop) {
         $container.css("margin-top", "40px");
       } else {
         $container.css("margin-top", "5px");
       }
+      
       if (params.piped) {
         $container.attr("data-ivem-pipe-source", params.pipe_source);
       }
@@ -233,19 +236,18 @@ IVEM.insertPreview = function (field, params) {
       var $source_img = $("<img/>")
         .addClass("IVEM")
         .attr("src", src)
-        // .css("width", "100%")
-        // .css("position", "absolute")
-        .css("max-height", "50%")
-        .css("width", "auto");
+        .css("width", "100%")
+        .css("position", "absolute")
+        .css("height", "100%")
+        .css("left", "0");
       if (params.piped) {
         var $annotation_img = $("<img/>")
           .addClass("IVEM")
           .attr("src", src)
-          // .css("width", "100%")
+          .css("width", "100%")
           .css("position", "absolute")
-          .css("left", "0")
-          .css("max-height", "50%")
-          .css("width", "auto");
+          .css("height", "100%")
+          .css("left", "0");
         // Show annotation markers on annotation image
         $annotation_img.on("click", function () {
           // Get image data from jquery variables
@@ -270,7 +272,7 @@ IVEM.insertPreview = function (field, params) {
           .css("width", "0")
           .css("padding", "0")
           .css("visibility", "hidden");
-      } 
+      }
 
       // Append custom CSS if specified for the field
       $.each(params.params, function (k, v) {
