@@ -204,8 +204,7 @@ IVEM.insertPreview = function (field, params) {
         .attr("data-ivem-container", params.container_id)
         .css("position", "relative")
         .css("margin-bottom", "40px")
-        .css("height", "50vh")
-        .css("max-width", "300px");
+        .css("height", "50vh");
       
       // Container adjustments based on desktop or mobile
       if (is_desktop) {
@@ -239,7 +238,8 @@ IVEM.insertPreview = function (field, params) {
         .css("width", "100%")
         .css("position", "absolute")
         .css("height", "100%")
-        .css("left", "0");
+        .css("left", "0")
+        .css("object-fit", "contain");
       if (params.piped) {
         var $annotation_img = $("<img/>")
           .addClass("IVEM")
@@ -247,7 +247,8 @@ IVEM.insertPreview = function (field, params) {
           .css("width", "100%")
           .css("position", "absolute")
           .css("height", "100%")
-          .css("left", "0");
+          .css("left", "0")
+          .css("object-fit", "contain");
         // Show annotation markers on annotation image
         $annotation_img.on("click", function () {
           // Get image data from jquery variables
