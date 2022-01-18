@@ -209,9 +209,9 @@ IVEM.insertPreview = function (field, params) {
       
       // Container adjustments based on desktop or mobile
       if (is_desktop) {
-        $container.css("margin-top", "40px");
+        $container.css("margin-top", "45px");
       } else {
-        $container.css("margin-top", "5px");
+        $container.css("margin-top", "15px");
       }
       
       if (params.piped) {
