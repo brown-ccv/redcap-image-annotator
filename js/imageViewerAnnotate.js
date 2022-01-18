@@ -1,6 +1,6 @@
 var IVEM = IVEM || {};
 
-// shows marker along with inserting marker data into text field
+// Shows marker along with inserting marker data into text field
 function showMarkerArea(target, source, input) {
   const markerArea = new markerjs2.MarkerArea(source);
   // Limit available markers
@@ -11,7 +11,7 @@ function showMarkerArea(target, source, input) {
   markerArea.targetRoot = source.parentElement;
   markerArea.addEventListener("render", (event) => {
     target.src = event.dataUrl;
-    // insert annotation data into text area
+    // Insert annotation data into text area
     input.val(JSON.stringify(event.state));
   });
   // Show marker
@@ -200,11 +200,12 @@ IVEM.insertPreview = function (field, params) {
   if (params.hasOwnProperty("container_id")) {
     $container = $("div[data-ivem-container=" + params.container_id + "]");
     if ($container.length == 0) {
+      // Container styling is based on portrait and landscape image use cases
       $container = $("<div></div>")
         .attr("data-ivem-container", params.container_id)
         .css("position", "relative")
-        .css("margin-bottom", "40px")
-        .css("height", "50vh");
+        .css("margin", "5px auto 40px")
+        .css("max-width", "max(70vw, 250px)");
       
       // Container adjustments based on desktop or mobile
       if (is_desktop) {
@@ -232,23 +233,22 @@ IVEM.insertPreview = function (field, params) {
     if (params.suffix) {
       // We are putting a copy of the original image under the result image so it's always annotation-free 
       // Ref: https://markerjs.com/demos/save-state
+      // Source and annotation image styling is based on portrait and landscape image use cases
       var $source_img = $("<img/>")
         .addClass("IVEM")
         .attr("src", src)
-        .css("width", "100%")
-        .css("position", "absolute")
-        .css("height", "100%")
-        .css("left", "0")
-        .css("object-fit", "contain");
+        .css("max-width", "100%")
+        .css("max-height", "100%")
+        .css("margin", "0 auto");
       if (params.piped) {
         var $annotation_img = $("<img/>")
           .addClass("IVEM")
           .attr("src", src)
-          .css("width", "100%")
           .css("position", "absolute")
-          .css("height", "100%")
-          .css("left", "0")
-          .css("object-fit", "contain");
+          .css("max-width", "100%")
+          .css("max-height", "100%")
+          .css("left", "0px")
+          .css("top", "0px");
         // Show annotation markers on annotation image
         $annotation_img.on("click", function () {
           // Get image data from jquery variables
