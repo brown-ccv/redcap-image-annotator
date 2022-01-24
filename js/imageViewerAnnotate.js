@@ -96,7 +96,6 @@ IVEM.init = function () {
  */
 IVEM.insertPreview = function (field, params) {
   var data = IVEM.preview_fields[field];
-
   // Get parent tr for table
   var tr = $('tr[sq_id="' + field + '"]');
   if (!tr.length) return;
@@ -205,8 +204,7 @@ IVEM.insertPreview = function (field, params) {
         .attr("data-ivem-container", params.container_id)
         .css("position", "relative")
         .css("margin", "5px auto 40px")
-        .css("max-width", "max(70vw, 250px)");
-      
+
       // Container adjustments based on desktop or mobile
       if (is_desktop) {
         $container.css("margin-top", "45px");
@@ -270,8 +268,8 @@ img.onload = function () {
           .css("max-height", "100%")
           .css("left", "0px")
           .css("top", "0px");
-        // Show annotation markers on annotation image
-        $annotation_img.on("click", function () {
+        // Show annotation markers on the annotation image
+        $annotation_img.on("click load", function () {
           // Get image data from jquery variables
           const target_img = $annotation_img[0];
           const source_img = $source_img[0];
@@ -308,7 +306,6 @@ img.onload = function () {
       if (params.piped) {
         $this_cont.empty().append($source_img).append($annotation_img);
       }
-
     }
   });
 };
