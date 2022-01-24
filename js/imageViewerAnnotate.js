@@ -238,8 +238,8 @@ IVEM.insertPreview = function (field, params) {
         .addClass("IVEM")
         .attr("src", src)
         .css("max-width", "100%")
-        .css("max-height", "100%")
-        .css("margin", "0 auto");
+        .css("max-height", "100%");
+
       if (params.piped) {
         var $annotation_img = $("<img/>")
           .addClass("IVEM")
