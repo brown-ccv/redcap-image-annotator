@@ -243,7 +243,7 @@ let img_poll = setInterval(function () {
 img.onload = function () {
   if (is_portrait) {
     $container.each( function () {
-      $(this).css("max-width", "max(50vw, 250px)");
+      $(this).css("max-width", "max(80vw, 250px)");
     });
   }
 }
