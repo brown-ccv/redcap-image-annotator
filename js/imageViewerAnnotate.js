@@ -228,25 +228,25 @@ IVEM.insertPreview = function (field, params) {
     $container = $("div[data-ivem-pipe-source=" + params.pipe_source + "]");
   }
 
-// If an image is loaded as portrait, make styling adjustments to the image's container
-let is_portrait = null;
-let img = document.createElement('img');
-img.src = src;
-// Poll image to get its dimensions
-let img_poll = setInterval(function () {
-  if (img.naturalWidth) {
-      clearInterval(img_poll);
-      is_portrait = img.naturalWidth < img.naturalHeight;
+  // If an image is loaded as portrait, make styling adjustments to the image's container
+  let is_portrait = null;
+  let img = document.createElement('img');
+  img.src = src;
+  // Poll image to get its dimensions
+  let img_poll = setInterval(function () {
+    if (img.naturalWidth) {
+        clearInterval(img_poll);
+        is_portrait = img.naturalWidth < img.naturalHeight;
+    }
+  }, 10);
+  // Apply stylng
+  img.onload = function () {
+    if (is_portrait) {
+      $container.each( function () {
+        $(this).css("max-width", "max(80vw, 250px)");
+      });
+    }
   }
-}, 10);
-// Apply stylng
-img.onload = function () {
-  if (is_portrait) {
-    $container.each( function () {
-      $(this).css("max-width", "max(80vw, 250px)");
-    });
-  }
-}
 
   $container.each(function () {
     $this_cont = $(this);
