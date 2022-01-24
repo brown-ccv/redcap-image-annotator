@@ -12,9 +12,8 @@ use BrownCCV\Utility\ActionTagHelper;
 
 class ImageViewerAnnotate extends \ExternalModules\AbstractExternalModule {
 
-    private $imageViewTag = "@IMAGEVIEW";
-    // private $imagePipeTag = "@IMAGEPIPE";
-    private $imagePipeTag = "@IMAGEANNOTATE";
+    private $imageViewTag = "@IMAGE-ANNOTATE-UPLOAD";
+    private $imagePipeTag = "@IMAGE-ANNOTATE";
     private $valid_image_suffixes = array('jpeg','jpg','jpe','gif','png','tif','bmp');
     private $valid_pdf_suffixes = array('pdf');
 

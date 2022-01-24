@@ -1,13 +1,17 @@
 var IVEM = IVEM || {};
 
-// shows marker along with inserting marker data into text field
+// Shows marker along with inserting marker data into text field
 function showMarkerArea(target, source, input) {
   const markerArea = new markerjs2.MarkerArea(source);
+  // Limit available markers
+  markerArea.availableMarkerTypes = [
+    "FreehandMarker"
+  ]
   // Place marker over image
   markerArea.targetRoot = source.parentElement;
   markerArea.addEventListener("render", (event) => {
     target.src = event.dataUrl;
-    // insert annotation data into text area
+    // Insert annotation data into text area
     input.val(JSON.stringify(event.state));
   });
   // Show marker
@@ -98,8 +102,22 @@ IVEM.insertPreview = function (field, params) {
   if (!tr.length) return;
   var td_label = tr.find("td.labelrc").last();
 
-  // hide text input
-  tr.find("textarea").css("visibility", "hidden");
+  // Check if desktop (width > 700)
+  const is_desktop = tr[0].ownerDocument.body.offsetWidth > 700;
+
+  // Style and hide text input
+  tr.find("textarea")
+    .css("height", "0")
+    .css("width", "0")
+    .css("padding", "0")
+    .css("visibility", "hidden");
+  
+  // Style and hide expand link
+  tr.find("[id$=expand]")
+    .css("height", "0")
+    .css("width", "0")
+    .css("padding", "0")  
+    .css("visibility", "hidden");
 
   // Get hash (surveys only)
   var hash = $("#form :input[name=__response_hash__]").val();
@@ -182,12 +200,19 @@ IVEM.insertPreview = function (field, params) {
   if (params.hasOwnProperty("container_id")) {
     $container = $("div[data-ivem-container=" + params.container_id + "]");
     if ($container.length == 0) {
+      // Container styling is based on portrait and landscape image use cases
       $container = $("<div></div>")
         .attr("data-ivem-container", params.container_id)
         .css("position", "relative")
-        .css("padding-top", "30px")
-        .css("margin-left", "auto")
-        .css("margin-right", "auto");
+        .css("margin", "5px auto 40px");
+      
+      // Container adjustments based on desktop or mobile
+      if (is_desktop) {
+        $container.css("margin-top", "45px");
+      } else {
+        $container.css("margin-top", "15px");
+      }
+      
       if (params.piped) {
         $container.attr("data-ivem-pipe-source", params.pipe_source);
       }
@@ -201,23 +226,49 @@ IVEM.insertPreview = function (field, params) {
     // Piping - get target containers
     $container = $("div[data-ivem-pipe-source=" + params.pipe_source + "]");
   }
+
+  // If an image is loaded as portrait, make styling adjustments to the image's container
+  let is_portrait = null;
+  let img = document.createElement('img');
+  img.src = src;
+  // Poll image to get its dimensions
+  let img_poll = setInterval(function () {
+    if (img.naturalWidth) {
+        clearInterval(img_poll);
+        is_portrait = img.naturalWidth < img.naturalHeight;
+    }
+  }, 10);
+  // Apply stylng
+  img.onload = function () {
+    if (is_portrait) {
+      $container.each( function () {
+        $(this).css("max-width", "max(80vw, 250px)");
+      });
+    }
+  }
+
   $container.each(function () {
     $this_cont = $(this);
     // Create a new image element
     if (params.suffix) {
       // We are putting a copy of the original image under the result image so it's always annotation-free 
       // Ref: https://markerjs.com/demos/save-state
+      // Source and annotation image styling is based on portrait and landscape image use cases
       var $source_img = $("<img/>")
         .addClass("IVEM")
         .attr("src", src)
-        .css("width", "100%")
+        .css("max-width", "100%")
+        .css("max-height", "100%");
+
       if (params.piped) {
         var $annotation_img = $("<img/>")
           .addClass("IVEM")
           .attr("src", src)
-          .css("width", "100%")
           .css("position", "absolute")
-          .css("left", "0");  
+          .css("max-width", "100%")
+          .css("max-height", "100%")
+          .css("left", "0px")
+          .css("top", "0px");
         // Show annotation markers on annotation image
         $annotation_img.on("click", function () {
           // Get image data from jquery variables
@@ -226,11 +277,24 @@ IVEM.insertPreview = function (field, params) {
           const text_input = $(
             target_img.closest("tr").getElementsByTagName("textarea")[0]
           );
-          // Only show the marker if we have a text area
           showMarkerArea(target_img, source_img, text_input);
         });
       }
-      
+
+      // For desktop and annotation areas...
+      let $td_labelrc = $this_cont.closest("td.labelrc");
+      if (is_desktop && ($td_labelrc.length != 0)) {
+        // Have survey question and image take over both columns
+        $td_labelrc.attr("colspan", "2");
+        
+        // Style and hide data cell
+        $td_labelrc.siblings("td.data")
+          .css("height", "0")
+          .css("width", "0")
+          .css("padding", "0")
+          .css("visibility", "hidden");
+      }
+
       // Append custom CSS if specified for the field
       $.each(params.params, function (k, v) {
         $source_img.css(k, v);
@@ -243,6 +307,7 @@ IVEM.insertPreview = function (field, params) {
       if (params.piped) {
         $this_cont.empty().append($source_img).append($annotation_img);
       }
+
     }
   });
 };
