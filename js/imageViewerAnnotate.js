@@ -4,9 +4,13 @@ var IVEM = IVEM || {};
 function showMarkerArea(target, source, input) {
   const markerArea = new markerjs2.MarkerArea(source);
   // Limit available markers
-  markerArea.availableMarkerTypes = [
-    "FreehandMarker"
-  ]
+  markerArea.availableMarkerTypes = ["FreehandMarker"];
+  // Set default marker and limit color to neon green
+  markerArea.settings.defaultColor = ['#14e318'];
+  markerArea.settings.defaultColorSet = ['#14e318'];
+  // Set default and limit stroke width
+  markerArea.settings.defaultStrokeWidth = 1;
+  markerArea.settings.defaultStrokeWidths = [1];
   // Place marker over image
   markerArea.targetRoot = source.parentElement;
   markerArea.addEventListener("render", (event) => {
@@ -96,7 +100,6 @@ IVEM.init = function () {
  */
 IVEM.insertPreview = function (field, params) {
   var data = IVEM.preview_fields[field];
-
   // Get parent tr for table
   var tr = $('tr[sq_id="' + field + '"]');
   if (!tr.length) return;
@@ -205,7 +208,7 @@ IVEM.insertPreview = function (field, params) {
         .attr("data-ivem-container", params.container_id)
         .css("position", "relative")
         .css("margin", "5px auto 40px");
-      
+
       // Container adjustments based on desktop or mobile
       if (is_desktop) {
         $container.css("margin-top", "45px");
@@ -269,8 +272,8 @@ IVEM.insertPreview = function (field, params) {
           .css("max-height", "100%")
           .css("left", "0px")
           .css("top", "0px");
-        // Show annotation markers on annotation image
-        $annotation_img.on("click", function () {
+        // Show annotation markers on the annotation image
+        $annotation_img.on("click load", function () {
           // Get image data from jquery variables
           const target_img = $annotation_img[0];
           const source_img = $source_img[0];
@@ -307,7 +310,6 @@ IVEM.insertPreview = function (field, params) {
       if (params.piped) {
         $this_cont.empty().append($source_img).append($annotation_img);
       }
-
     }
   });
 };
