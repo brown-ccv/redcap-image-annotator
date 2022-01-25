@@ -203,7 +203,7 @@ IVEM.insertPreview = function (field, params) {
       $container = $("<div></div>")
         .attr("data-ivem-container", params.container_id)
         .css("position", "relative")
-        .css("margin", "5px auto 40px")
+        .css("margin", "5px auto 40px");
 
       // Container adjustments based on desktop or mobile
       if (is_desktop) {
