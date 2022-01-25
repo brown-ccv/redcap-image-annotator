@@ -4,9 +4,13 @@ var IVEM = IVEM || {};
 function showMarkerArea(target, source, input) {
   const markerArea = new markerjs2.MarkerArea(source);
   // Limit available markers
-  markerArea.availableMarkerTypes = [
-    "FreehandMarker"
-  ]
+  markerArea.availableMarkerTypes = ["FreehandMarker"];
+  // Set default marker and limit color to neon green
+  markerArea.settings.defaultColor = ['#14e318'];
+  markerArea.settings.defaultColorSet = ['#14e318'];
+  // Set default and limit stroke width
+  markerArea.settings.defaultStrokeWidth = 1;
+  markerArea.settings.defaultStrokeWidths = [1];
   // Place marker over image
   markerArea.targetRoot = source.parentElement;
   markerArea.addEventListener("render", (event) => {
