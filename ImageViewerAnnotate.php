@@ -14,8 +14,7 @@ class ImageViewerAnnotate extends \ExternalModules\AbstractExternalModule {
 
     private $imageViewTag = "@IMAGE-ANNOTATE-UPLOAD";
     private $imagePipeTag = "@IMAGE-ANNOTATE";
-    private $valid_image_suffixes = array('jpeg','jpg','jpe','gif','png','tif','bmp');
-    private $valid_pdf_suffixes = array('pdf');
+    private $valid_image_suffixes = array('jpeg','jpg','jpe','gif','png','tif');
 
     function __construct() {
         parent::__construct();
@@ -107,7 +106,7 @@ class ImageViewerAnnotate extends \ExternalModules\AbstractExternalModule {
             // Get file attributes and contents
             list($mime_type, $doc_name, $contents) = Files::getEdocContentsAttributes($doc_id);
             $suffix = strtolower(pathinfo($doc_name, PATHINFO_EXTENSION));
-            if(!in_array($suffix, array_merge($this->valid_pdf_suffixes, $this->valid_image_suffixes))) {
+            if(!in_array($suffix, array_merge($this->valid_image_suffixes))) {
                 // Invalid suffix - skip
                 Util::log("Invalid Suffix", $doc_name);
             } else {
@@ -282,7 +281,6 @@ class ImageViewerAnnotate extends \ExternalModules\AbstractExternalModule {
             <script src="<?php print $this->getUrl('js/markerjs2.js'); ?>"></script>
             <script>
                 IVEM.valid_image_suffixes = <?php print json_encode($this->valid_image_suffixes) ?>;
-                IVEM.valid_pdf_suffixes = <?php print json_encode($this->valid_pdf_suffixes) ?>;
                 IVEM.field_params = <?php print json_encode($field_params) ?>;
                 IVEM.payload = <?php print json_encode($payload) ?>;
                 IVEM.debug = <?php print json_encode($debug) ?>;
