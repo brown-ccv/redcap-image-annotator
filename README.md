@@ -18,4 +18,4 @@ A REDCap external module (EM) that extends the [Image Viewer EM](https://github.
 - GIF (.gif)
 ## Example
 
-![annotate example](docs/annotate.png)
+![annotate example](docs/EM-demo.gif)
