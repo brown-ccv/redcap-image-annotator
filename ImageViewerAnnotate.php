@@ -106,7 +106,7 @@ class ImageViewerAnnotate extends \ExternalModules\AbstractExternalModule {
             // Get file attributes and contents
             list($mime_type, $doc_name, $contents) = Files::getEdocContentsAttributes($doc_id);
             $suffix = strtolower(pathinfo($doc_name, PATHINFO_EXTENSION));
-            if(!in_array($suffix, array_merge($this->valid_image_suffixes))) {
+            if(!in_array($suffix, $this->valid_image_suffixes)) {
                 // Invalid suffix - skip
                 Util::log("Invalid Suffix", $doc_name);
             } else {
