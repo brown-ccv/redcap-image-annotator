@@ -14,6 +14,8 @@ A REDCap external module (EM) that extends the [Image Viewer EM](https://github.
 
 - JPEG (.jpeg, jpg, jpe)
 - PNG (.png)
+- TIF (.tiff)
+- GIF (.gif)
 ## Example
 
-![annotate example](docs/annotate.png)
+![annotate example](docs/EM-demo.gif)
