@@ -1,4 +1,4 @@
-<?php namespace DE\RUB\CryptoHelper;
+<?php namespace DE\RUB\AnnotateCryptoHelper;
 
 use Exception;
 
@@ -53,7 +53,7 @@ class Crypto {
             $proj_salt = $GLOBALS["Proj"]->project["__SALT__"];
             $proj_id = $GLOBALS["Proj"]->project_id;
             $blobKey = hash("sha256", "BlobKey-$rc_salt-$userid-$proj_salt-$proj_id");
-            $hmacKey = hash("md5", "HmacKey-$blobKey");
+            $hmacKey = hash("sha256", "HmacKey-$blobKey");
             $blobKey = base64_encode(substr($blobKey, 0, 32));
             $hmacKey = base64_encode(substr($hmacKey.$hmacKey, 0, 32));
         }
