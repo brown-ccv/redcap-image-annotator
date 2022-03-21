@@ -64,8 +64,8 @@ class ImageViewerAnnotate extends \ExternalModules\AbstractExternalModule {
         if ((PAGE == "surveys/index.php" || PAGE == "DataEntry/file_download.php") && isset($_GET["ivem_preview"])) {
 
             // Verify payload
-            if (!class_exists("\DE\RUB\CryptoHelper")) include_once("classes/CryptoHelper.php");
-            $crypto = \DE\RUB\CryptoHelper\Crypto::init();
+            if (!class_exists("\DE\RUB\AnnotateCryptoHelper")) include_once("classes/AnnotateCryptoHelper.php");
+            $crypto = \DE\RUB\AnnotateCryptoHelper\Crypto::init();
             $payload = $_GET["ivem_preview"];
             $payload = $crypto->decrypt($payload);
             if (!is_array($payload) || $payload["pid"] !== $project_id) {
@@ -265,8 +265,8 @@ class ImageViewerAnnotate extends \ExternalModules\AbstractExternalModule {
         $debug = $this->getProjectSetting("javascript-debug") == true;
         // Security token - needed to perform safe piping
         if ($project_id) {
-            if (!class_exists("\DE\RUB\CryptoHelper")) include_once("classes/CryptoHelper.php");
-            $crypto = \DE\RUB\CryptoHelper\Crypto::init();
+            if (!class_exists("\DE\RUB\AnnotateCryptoHelper")) include_once("classes/AnnotateCryptoHelper.php");
+            $crypto = \DE\RUB\AnnotateCryptoHelper\Crypto::init();
             $payload = $crypto->encrypt(array( 
                 "pid" => $project_id * 1,
                 "allowed" => $allowed

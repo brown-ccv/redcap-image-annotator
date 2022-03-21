@@ -1,4 +1,4 @@
-<?php namespace DE\RUB\CryptoHelper;
+<?php namespace DE\RUB\AnnotateCryptoHelper;
 
 use Exception;
 
