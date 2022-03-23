@@ -280,7 +280,13 @@ IVEM.insertPreview = function (field, params) {
           const text_input = $(
             target_img.closest("tr").getElementsByTagName("textarea")[0]
           );
-          showMarkerArea(target_img, source_img, text_input);
+          console.log(source_img.complete, source_img.naturalHeight, source_img.naturalWidth, source_img.height, source_img.width, source_img);
+          if (source_img.naturalHeight != source_img.height) {
+            console.log("show annotation options");
+            showMarkerArea(target_img, source_img, text_input);
+          }
+          // console.log(target_img.complete, target_img.naturalHeight, target_img.naturalWidth, target_img.height, target_img.width);
+          // showMarkerArea(target_img, source_img, text_input);
         });
       }
 
