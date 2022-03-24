@@ -51,7 +51,7 @@
     },
     {
       "key": "active-fields",
-      "name": "Configure one or more file-upload fields to activate ImageViewer preview:",
+      "name": "Configure one or more file-upload fields to activate ImageViewerAnnotate preview:",
       "required": false,
       "type": "sub_settings",
       "repeatable": true,
