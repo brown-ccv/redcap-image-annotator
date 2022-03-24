@@ -1,9 +1,9 @@
 {
-  "name": "Image Viewer and Annotate",
+  "name": "Image Annotate",
 
   "namespace":"BrownCCV\\ImageViewerAnnotate",
 
-  "description": "Preview and annotate uploaded images on a form/survey",
+  "description": "Annotate uploaded images on a form/survey",
 
   "framework-version": 3,
 
