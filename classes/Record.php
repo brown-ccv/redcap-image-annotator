@@ -1,4 +1,4 @@
-<?php namespace DE\RUB\ImageViewerAnnotateExternalModule;
+<?php namespace DE\RUB\ImageAnnotatorExternalModule;
 
 use \REDCap;
 

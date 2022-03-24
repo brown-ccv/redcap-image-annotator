@@ -1,8 +1,8 @@
-<?php namespace BrownCCV\ImageViewerAnnotate;
+<?php namespace BrownCCV\ImageAnnotator;
 
 if (!class_exists("Util")) include_once("classes/Util.php");
 
-use DE\RUB\ImageViewerAnnotateExternalModule\Project;
+use DE\RUB\ImageAnnotatorExternalModule\Project;
 use \REDCap as REDCap;
 use \Files as Files;
 use \Piping as Piping;
@@ -10,7 +10,7 @@ use \Event as Event;
 
 use BrownCCV\Utility\ActionTagHelper;
 
-class ImageViewerAnnotate extends \ExternalModules\AbstractExternalModule {
+class ImageAnnotator extends \ExternalModules\AbstractExternalModule {
 
     private $imageViewTag = "@IMAGE-ANNOTATE-UPLOAD";
     private $imagePipeTag = "@IMAGE-ANNOTATE";
@@ -46,7 +46,7 @@ class ImageViewerAnnotate extends \ExternalModules\AbstractExternalModule {
                 <script>IVEM.interval = window.setInterval(IVEM.highlightFields, 1000);</script>
             <?php
         }
-        // Announce that this project is using the Image Viewer EM
+        // Announce that this project is using the Image Annotator EM
         if (PAGE == "ProjectSetup/index.php") {
             $this->renderJavascriptSetup();
             ?>
@@ -222,7 +222,7 @@ class ImageViewerAnnotate extends \ExternalModules\AbstractExternalModule {
         // Get from action tags (and only take if not specified in external module settings)
         if (!class_exists("\BrownCCV\Utility\ActionTagHelper")) include_once("classes/ActionTagHelper.php");
 
-        if (!class_exists("\DE\RUB\ImageViewerAnnotateExternalModule\Project")) include_once ("classes/Project.php");
+        if (!class_exists("\DE\RUB\ImageAnnotatorExternalModule\Project")) include_once ("classes/Project.php");
         $project = new Project($this->framework, $project_id ?: $this->framework->getProjectId());
 
         $field_params = array();
@@ -277,7 +277,7 @@ class ImageViewerAnnotate extends \ExternalModules\AbstractExternalModule {
         }
         $payload = urlencode($payload);
         ?>
-            <script src="<?php print $this->getUrl('js/imageViewerAnnotate.js'); ?>"></script>
+            <script src="<?php print $this->getUrl('js/ImageAnnotator.js'); ?>"></script>
             <script src="<?php print $this->getUrl('js/markerjs2.js'); ?>"></script>
             <script>
                 IVEM.valid_image_suffixes = <?php print json_encode($this->valid_image_suffixes) ?>;
@@ -302,7 +302,7 @@ class ImageViewerAnnotate extends \ExternalModules\AbstractExternalModule {
      */
     function renderPreview($project_id, $instrument, $record, $event_id, $instance, $survey_hash = null) {
 
-        if (!class_exists("\DE\RUB\ImageViewerAnnotateExternalModule\Project")) include_once ("classes/Project.php");
+        if (!class_exists("\DE\RUB\ImageAnnotatorExternalModule\Project")) include_once ("classes/Project.php");
         $project = new Project($this->framework, $project_id);
 
         $active_field_params = $this->getFieldParams();

@@ -1,7 +1,7 @@
 {
-  "name": "Image Annotate",
+  "name": "Image Annotator",
 
-  "namespace":"BrownCCV\\ImageViewerAnnotate",
+  "namespace":"BrownCCV\\ImageAnnotator",
 
   "description": "Annotate uploaded images on a form/survey",
 
@@ -51,7 +51,7 @@
     },
     {
       "key": "active-fields",
-      "name": "Configure one or more file-upload fields to activate ImageViewerAnnotate preview:",
+      "name": "Configure one or more file-upload fields to activate Image Annotator preview:",
       "required": false,
       "type": "sub_settings",
       "repeatable": true,

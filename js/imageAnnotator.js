@@ -64,13 +64,13 @@ IVEM.highlightFields = function () {
     if (tr.length) {
       var icon_div = $(".frmedit_icons", tr);
       var label = $(
-        '<div style="float:right;margin-right:1em;"><i class="far fa-eye"></i> <i>Image Viewer</i></div>'
+        '<div style="float:right;margin-right:1em;"><i class="far fa-eye"></i> <i>Image Annotator</i></div>'
       )
         .addClass("label label-primary em-label text-dark")
         .attr("data-toggle", "tooltip")
         .attr(
           "title",
-          "The content of this field is customized by the Image Viewer External Module" +
+          "The content of this field is customized by the Image Annotator External Module" +
             (params ? ":\n" + JSON.stringify(params) : "")
         )
         .on("click", function () {
