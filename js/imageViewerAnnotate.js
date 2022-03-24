@@ -349,11 +349,11 @@ IVEM.projectSetup = function () {
         );
       }
 
-      var label = $("<span>ImageViewer</span>")
+      var label = $("<span>ImageAnnotate</span>")
         .addClass("label label-primary label-lg em-label")
         .attr(
           "title",
-          "The content of this project is customized by the Image Viewer External Module"
+          "The content of this project is customized by the Image Annotator External Module"
         );
 
       var badge = $("<span></span>")
