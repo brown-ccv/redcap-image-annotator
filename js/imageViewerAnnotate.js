@@ -2,6 +2,11 @@ var IVEM = IVEM || {};
 
 // Shows marker along with inserting marker data into text field
 function showMarkerArea(target, source, input) {
+  // Continue only if the target image is positioned
+  if (target.x === 0) {
+    setTimeout(showMarkerArea, 500, target, source, input)
+    return
+  }
   const markerArea = new markerjs2.MarkerArea(source);
   // Limit available markers
   markerArea.availableMarkerTypes = ["FreehandMarker"];
