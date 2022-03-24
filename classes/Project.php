@@ -1,4 +1,4 @@
-<?php namespace DE\RUB\ImageViewerAnnotateExternalModule;
+<?php namespace DE\RUB\ImageAnnotatorExternalModule;
 
 class Project
 {
@@ -29,7 +29,7 @@ class Project
      * @return Record 
      */
     function getRecord($record_id) {
-        if (!class_exists("\DE\RUB\ImageViewerAnnotateExternalModule\Record")) include_once ("Record.php");
+        if (!class_exists("\DE\RUB\ImageAnnotatorExternalModule\Record")) include_once ("Record.php");
         return new Record($this->framework, $this, $record_id);
     }
 

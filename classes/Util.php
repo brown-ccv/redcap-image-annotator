@@ -1,5 +1,5 @@
 <?php
-namespace BrownCCV\ImageViewerAnnotate;
+namespace BrownCCV\ImageAnnotator;
 
 class Util
 {
