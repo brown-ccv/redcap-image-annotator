@@ -3,3 +3,4 @@ imgs/
 .DS_Store
 .code-workspace
 rdc-instruments/
+*.zip
