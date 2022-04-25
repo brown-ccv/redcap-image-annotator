@@ -58,4 +58,6 @@ To export the images uploaded:
 
 ## Demo Example
 
+Data for this demo can be located at `demo_data`.
+
 ![annotate example](docs/EM-demo.gif)
