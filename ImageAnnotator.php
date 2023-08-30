@@ -27,17 +27,17 @@ class ImageAnnotator extends \ExternalModules\AbstractExternalModule {
     #region Hooks -----------------------------------------------------------------------------------------------------------
 
     // Capture normal data-entry
-    function hook_data_entry_form_top($project_id, $record = NULL, $instrument, $event_id, $group_id = NULL, $repeat_instance = 1) {
+    function redcap_data_entry_form_top($project_id, $record, $instrument, $event_id, $group_id, $repeat_instance = 1) {
         $this->renderPreview($project_id, $instrument,$record, $event_id, $repeat_instance);
     }
 
     // Capture surveys
-    function hook_survey_page_top($project_id, $record = NULL, $instrument, $event_id, $group_id = NULL, $survey_hash, $response_id = NULL, $repeat_instance = 1) {
+    function redcap_survey_page_top($project_id, $record, $instrument, $event_id, $group_id, $survey_hash, $response_id, $repeat_instance = 1) {
         $this->renderPreview($project_id, $instrument, $record, $event_id, $repeat_instance, $survey_hash);
     }
     
     // Designer and Project Setup cosmetics
-    function hook_every_page_top($project_id = null)
+    function redcap_every_page_top($project_id)
     {
         // When on the online designer, let's highlight the fields tagged for this EM
         if (PAGE == "Design/online_designer.php") {
@@ -57,7 +57,7 @@ class ImageAnnotator extends \ExternalModules\AbstractExternalModule {
     }
 
     // Renders the preview after a fresh upload
-    function hook_every_page_before_render($project_id = null) {
+    function redcap_every_page_before_render($project_id) {
         $project_id = $project_id === null ? -1 : $project_id * 1;
         
         // Handle survey call-backs for the file after upload
@@ -92,7 +92,8 @@ class ImageAnnotator extends \ExternalModules\AbstractExternalModule {
             // script.
             $hack = ! method_exists($this, "exitAfterHook");
 
-            $field_name = filter_input(INPUT_GET, 'field_name', FILTER_SANITIZE_STRING);
+            //$field_name = filter_input(INPUT_GET, 'field_name', FILTER_SANITIZE_STRING);
+            $field_name = htmlspecialchars($_GET['field_name'], ENT_QUOTES);
             $active_field_params = $this->getFieldParams();
             // Make sure the field is tagged for this module and that download is allowed
             if (!array_key_exists($field_name, $active_field_params)) return;
@@ -108,7 +109,7 @@ class ImageAnnotator extends \ExternalModules\AbstractExternalModule {
             $suffix = strtolower(pathinfo($doc_name, PATHINFO_EXTENSION));
             if(!in_array($suffix, $this->valid_image_suffixes)) {
                 // Invalid suffix - skip
-                Util::log("Invalid Suffix", $doc_name);
+                //Util::log("Invalid Suffix", $doc_name, "DEBUG");
             } else {
                 // Get size of contents
                 if (function_exists('mb_strlen')) {
@@ -180,8 +181,11 @@ class ImageAnnotator extends \ExternalModules\AbstractExternalModule {
 
         // Convert params into array where field is key
         $field_params = array();
-        foreach ($config_fields as $i => $field) {
-            $field_params[$field] = $config_params[$i];
+        if ( (isset($config_fields) && !is_null($config_fields))
+            && (isset($config_params) && !is_null($config_params)) ) {
+            foreach ($config_fields as $i => $field) {
+                $field_params[$field] = $config_params[$i];
+            }
         }
 
         // Get from action tags (and only take if not specified in external module settings)
@@ -258,9 +262,9 @@ class ImageAnnotator extends \ExternalModules\AbstractExternalModule {
         $field_params = $this->getFieldParams();
         // Make a list of all fields that may be downloaded
         $allowed = array_values(array_map(function($e) { 
-            return $e->field; 
+            //return $e->field; // not compatible with PHP 8
+            return $e['field'];
         }, $this->getPipedFields()));
-        
         $allowed = array_unique(array_merge($allowed, array_keys($field_params)));
         $debug = $this->getProjectSetting("javascript-debug") == true;
         // Security token - needed to perform safe piping
@@ -313,12 +317,13 @@ class ImageAnnotator extends \ExternalModules\AbstractExternalModule {
         $fields = array_intersect_key($active_field_params, array_flip($instrument_fields));
         $piped_fields = array_intersect_key($active_piped_fields, array_flip($instrument_fields));
         // Util::log("Fields on $instrument", $fields);
-        Util::log("Piped fields on $instrument", $piped_fields);
+        //Util::log("Piped fields on $instrument", $piped_fields, "DEBUG");
 
         // Merge in piped fields
         $source_fields = array_merge($fields);
         foreach ($piped_fields as $field => $source) {
-            if (!isset($source_fields[$source["field"]])) {
+            //if (!isset($source_fields[$source["field"]])) {
+            if (!array_key_exists($source["field"], $source_fields)) {
                 $source_fields[$source["field"]] = @$active_field_params[$field];
             }
         }
@@ -344,22 +349,30 @@ class ImageAnnotator extends \ExternalModules\AbstractExternalModule {
             $query_fields[$field] = array (
                 "field" => $source["field"], 
                 "event_id" => is_numeric($source_event) ? $source_event * 1 : Event::getEventIdByName($project_id, $source_event),
-                "instance" => $source["instance"] * 1 ?: 1
+                "instance" => (int)$source["instance"] * 1 ?: 1
             );
         }
         // Get field data - how to get this depends on the data structure of the project (repeating forms/events)
         $field_data = array();
         foreach ($query_fields as $field => $source) {
+            $doc_id = -1; // initialize
             $sourceField = $source["field"];
             $sourceForm = $project->getFormByField($sourceField);
             $sourceEventId = $source["event_id"];
             $sourceInstance = $source["instance"];
             $data = REDCap::getData('array',$record, $sourceField);
             if ($project->isFieldOnRepeatingForm($sourceField, $sourceEventId)) {
-                $result = $data[$record]["repeat_instances"][$sourceEventId][$sourceForm][$sourceInstance];
+                // If it's a new instance - then this doesn't exist in the data yet so we need to skip
+                if ( !isset($data[$record]["repeat_instances"][$sourceEventId][$sourceForm][$sourceInstance]) )
+                    $result = []; // New instance - not saved yet
+                else
+                    $result = $data[$record]["repeat_instances"][$sourceEventId][$sourceForm][$sourceInstance];
             }
             else if ($project->isEventRepeating($sourceEventId)) {
-                $result = $data[$record]["repeat_instances"][$sourceEventId][null][$sourceInstance];
+                if ( !isset($data[$record]["repeat_instances"][$sourceEventId][null][$sourceInstance]) )
+                    $result = []; // new instance - not saved yet
+                else
+                    $result = $data[$record]["repeat_instances"][$sourceEventId][null][$sourceInstance];
             }
             else {
                 $result = $data[$record][$sourceEventId];
@@ -371,7 +384,7 @@ class ImageAnnotator extends \ExternalModules\AbstractExternalModule {
                 $doc_id = $field_meta['edoc_id'];
             } 
             elseif ($field_type == 'file') {
-                $doc_id = $result[$sourceField];
+                $doc_id = isset($result[$sourceField]) ? $result[$sourceField] : -1;
             } 
             else {
                 // invalid field type!
@@ -407,9 +420,9 @@ class ImageAnnotator extends \ExternalModules\AbstractExternalModule {
             $pipe_sources[$from["field"]] = true;
             $preview_fields[$into] = $field_data[$into];
             $preview_fields[$into]["piped"] = true;
-            $preview_fields[$into]["params"] = isset($active_field_params[$into]) ? $active_field_params[$into] : @$active_field_params[$from];
+            $preview_fields[$into]["params"] = isset($active_field_params[$into]) ? $active_field_params[$into] : @$active_field_params[$from["field"]];
         }
-        Util::log("Previewing existing files", $preview_fields);
+        //Util::log("Previewing existing files", $preview_fields, "DEBUG");
 
         $this->renderJavascriptSetup($project_id);
         ?>

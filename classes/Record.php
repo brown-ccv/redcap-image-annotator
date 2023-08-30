@@ -39,7 +39,7 @@ class Record
      * @param string $event The event name or (numerical) event id.
      * @param array $instances An array of the instance data.
      * @return string A summary of the insertion: "event_id:first:last:count".
-     * @throws Exception An exception is thrown in case of project data structure violations.
+     * @throws \Exception An exception is thrown in case of project data structure violations.
      */
     public function addFormInstances($form, $event, $instances) {
         // Check event.
@@ -100,7 +100,7 @@ class Record
      * @param array $field_values An associative array (field_name => value).
      * @param string $event The name of the event or the (numerical) event id.
      * @param int $instances The repeat instance (optional).
-     * @throws Exception for violations of the project data structure.
+     * @throws \Exception for violations of the project data structure.
      */
     function updateFields($field_values, $event, $instances = 1) {
 
@@ -234,7 +234,7 @@ class Record
      * @param string $event The name of the event or the (numerical) event id.
      * @param int|array $instances The repeat instance(s) (optional).
      * @return array An associative array (field_name => value).
-     * @throws Exception for violations of the project data structure.
+     * @throws \Exception for violations of the project data structure.
      */
     public function getFieldValues($fields, $event, $instances = 1) {
         // Validate input.
@@ -279,7 +279,7 @@ class Record
      * @param string $event The event name of (numerical) event id.
      * @param [int] $instances The repeat instance (optional).
      * @return int|null The mode - one of REPEAT_EVENT, REPEAT_FORM, NON_REPEATING, or null if there is nothing to do.
-     * @throws Excetion in case of violations.
+     * @throws \Exception in case of violations.
      */
     private function validateFields($fields, $event, $instances) {
         $mode = null;
