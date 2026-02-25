@@ -1,5 +1,14 @@
 # Image Annotator
 
+![Static Badge](https://img.shields.io/badge/ARCHIVED-red)
+
+⛔️ This repository has been archived, it's code is unmantained.
+
+## About the project
+This was a collaboration with Taylor Burke (MGH) and Tomas Serre, involving the developement of redcap module for image annotation. You can learn more in the [scope document](https://docs.google.com/document/d/1f3lJTWytg-69kZd-Pp7w5A-UJI2nOJyVSuOxgmdwxqM/edit?tab=t.0#heading=h.p5cgds5l61p1)
+
+# ⛔️ OLD STATUS
+
 A REDCap external module (EM) that modifies the [Image Viewer EM](https://github.com/susom/redcap-em-image-viewer) to annotate uploaded images (using [markerjs2](https://markerjs.com/)) in notes box field types.
 
 **NOTE**: This EM does not include the [Image Viewer EM's](https://github.com/susom/redcap-em-image-viewer) action tags.
