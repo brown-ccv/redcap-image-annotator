@@ -152,7 +152,7 @@ class Project
      * If the field or event does not exists, null is returned.
      * 
      * @param string $field The field name.
-     * @param strign $event The event name or (numerical) event id.
+     * @param string $event The event name or (numerical) event id.
      * @return boolean|null
      */
     function isFieldOnRepeatingForm($field, $event) {
@@ -168,7 +168,7 @@ class Project
      * If the field does not exists, false is returned.
      * 
      * @param string $field The field name.
-     * @param strign $event The event name or (numerical) event id.
+     * @param string $event The event name or (numerical) event id.
      * @return boolean|null
      */
     function isFieldOnEvent($field, $event) {
@@ -283,7 +283,7 @@ class Project
      * 
      * @param int|string|null $pid The project id (optional).
      * @return array An associative array listing the repeating forms and events.
-     * @throws Exception From requireProjectId if no project id can be found.
+     * @throws \Exception From requireProjectId if no project id can be found.
      */
     function getRepeatingFormsEvents($pid = null) {
 
@@ -322,7 +322,7 @@ class Project
      * 
      * @param int|null $event_id The event id (optional)
      * @return array An array of form names.
-     * @throws Exception From requireProjectId or ExternalModules::getEventId if event_id, project_id cannot be deduced or multiple event ids are in a project.
+     * @throws \Exception From requireProjectId or ExternalModules::getEventId if event_id, project_id cannot be deduced or multiple event ids are in a project.
      */
     function getEventForms($event_id = null) {
         if($event_id === null){

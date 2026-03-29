@@ -17,6 +17,17 @@
       "name": "Mary McGrath",
       "email": "mary_mcgrath@brown.edu",
       "institution": "Brown University"
+    },
+    {
+      "name": "Dimitar Dimitrov",
+      "email": "ddimitrov@mgb.org",
+      "institution": "Mass General Brigham"
+    }
+  ],
+
+  "versions": [
+    {
+      "1.3.0": "Working on PHP 8 compatibility; Addressed a few minor bugs"
     }
   ],
 
@@ -51,7 +62,7 @@
     }
   ],
   "compatibility": {
-      "php-version-min": "5.6.0",
+      "php-version-min": "7.4.0",
       "php-version-max": "",
       "redcap-version-min": "9.7.8",
       "redcap-version-max": ""

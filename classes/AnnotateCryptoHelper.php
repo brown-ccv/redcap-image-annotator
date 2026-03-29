@@ -29,7 +29,7 @@ class Crypto {
      * Keys are auto-gernerated and saved as a module system setting.
      * If no module is given, the keys are derived from the environment (user, project).
      * 
-     * @param AbstractExternalModule $module The module instance wanting to use Crypto (optional)
+     * @param \ExternalModules\AbstractExternalModule $module The module instance wanting to use Crypto (optional)
      */
     public static function init($module = null) {
         if (!function_exists("openssl_encrypt")) {
